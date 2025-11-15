@@ -100,6 +100,7 @@
     button.tab { background:#fff; color:#111; border-color:#bbb; }
     button.tab.active { background:#111; color:#fff; border-color:#111; }
 
+    /* Colores específicos de botones principales */
     #btnPrint {
       background:#2e7d32;
       border-color:#2e7d32;
@@ -132,6 +133,7 @@
 
     .table-actions { display:flex; justify-content:flex-end; margin-top:8px; }
 
+    /* Mobile friendly */
     @media (max-width: 768px) {
       html, body { height:auto; }
       .page {
@@ -168,11 +170,13 @@
       }
     }
 
+    /* Impresión */
     @media print {
       @page { size: Letter; margin: 14mm; }
       .actions { display: none !important; }
       body { background: #fff; }
       input, textarea { border: 1px solid transparent; }
+      /* Solo imprimir el tab activo */
       .tabcontent { display:none !important; }
       .tabcontent.active { display:block !important; }
     }
@@ -180,17 +184,17 @@
 </head>
 <body>
   <div class="page">
-
     <div class="actions">
       <button id="tabSolicitud" class="tab active" type="button">Solicitud de gastos</button>
       <button id="tabRendicion" class="tab" type="button">Rendición de gastos</button>
       <span style="flex:1 1 auto"></span>
-      <button id="btnPrint" type="button">Guardar/Imprimir PDF</button>
-      <button id="btnClear" type="button">Limpiar formulario</button>
+      <button id="btnPrint" type="button" title="Guardar como PDF">Guardar/Imprimir PDF</button>
+      <button id="btnClear" class="secondary" type="button" title="Borrar los campos visibles">Limpiar formulario</button>
     </div>
 
     <h1>FORMULARIO - SOLICITUD Y RENDICIÓN DE GASTOS</h1>
 
+    <!-- Estaca + Barrio con campo al lado (Opción A) -->
     <div class="sub inline-fields">
       <span>Estaca Calacoto - Barrio</span>
       <input type="text" id="barrio" placeholder="Nombre del barrio" style="max-width:220px;">
@@ -199,8 +203,9 @@
     <div class="bar"></div>
 
     <!-- TAB SOLICITUD -->
-    <div id="viewSolicitud" class="tabcontent active">
+    <div id="viewSolicitud" class="tabcontent active" aria-label="Solicitud de gastos">
 
+      <!-- Título + # Ref -->
       <div class="section-header">
         <div class="section-title">SOLICITUD DE GASTOS</div>
         <div class="inline-block">
@@ -219,7 +224,6 @@
           <input type="text" id="ref" />
         </div>
       </div>
-
       <div class="row grid">
         <div>
           <label for="organizacion">Organización</label>
@@ -230,10 +234,9 @@
           <input type="text" id="llamamiento" />
         </div>
       </div>
-
       <div class="row">
         <label for="proposito">Nombre y Propósito de la Actividad</label>
-        <textarea id="proposito"></textarea>
+        <textarea id="proposito" placeholder="Escriba aquí..."></textarea>
       </div>
 
       <div class="row">
@@ -254,16 +257,44 @@
             <tr>
               <td style="text-align:center;">1</td>
               <td><input type="text" class="det" /></td>
-              <td><input type="number" class="monto monto-s" step="0.01" /></td>
+              <td><input type="number" class="monto monto-s" step="0.01" inputmode="decimal" /></td>
+            </tr>
+            <tr>
+              <td style="text-align:center;">2</td>
+              <td><input type="text" class="det" /></td>
+              <td><input type="number" class="monto monto-s" step="0.01" inputmode="decimal" /></td>
+            </tr>
+            <tr>
+              <td style="text-align:center;">3</td>
+              <td><input type="text" class="det" /></td>
+              <td><input type="number" class="monto monto-s" step="0.01" inputmode="decimal" /></td>
+            </tr>
+            <tr>
+              <td style="text-align:center;">4</td>
+              <td><input type="text" class="det" /></td>
+              <td><input type="number" class="monto monto-s" step="0.01" inputmode="decimal" /></td>
+            </tr>
+            <tr>
+              <td style="text-align:center;">5</td>
+              <td><input type="text" class="det" /></td>
+              <td><input type="number" class="monto monto-s" step="0.01" inputmode="decimal" /></td>
+            </tr>
+            <tr>
+              <td style="text-align:center;">6</td>
+              <td><input type="text" class="det" /></td>
+              <td><input type="number" class="monto monto-s" step="0.01" inputmode="decimal" /></td>
             </tr>
           </tbody>
           <tfoot>
             <tr>
-              <td colspan="2">Total estimado</td>
+              <td colspan="2">Total estimado de presupuesto</td>
               <td><input type="number" id="totalSolicitado" readonly /></td>
             </tr>
           </tfoot>
         </table>
+        <div class="table-actions">
+          <button id="addRowSolicitud" type="button" class="secondary">Agregar fila</button>
+        </div>
       </div>
 
       <div class="row grid">
@@ -271,44 +302,232 @@
           <label>Firma de aprobación del Presidente</label>
           <div class="sigline"></div>
         </div>
+        <div></div>
       </div>
     </div>
 
     <!-- TAB RENDICIÓN -->
-    <div id="viewRendicion" class="tabcontent">
-
+    <div id="viewRendicion" class="tabcontent" aria-label="Rendición de gastos">
       <div class="section-title">RENDICIÓN DE GASTOS</div>
 
       <div class="row">
         <table id="tablaRendicion">
           <thead>
             <tr>
-              <th>Nº</th>
-              <th>Detalle</th>
-              <th>Nº Factura</th>
-              <th>Monto (Bs)</th>
+              <th style="width:50px;">Nº</th>
+              <th>Detalle general de factura</th>
+              <th style="width:160px;">Nº factura</th>
+              <th style="width:140px;">Monto (Bs)</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>1</td>
-              <td><input type="text"/></td>
-              <td><input type="text"/></td>
-              <td><input type="number" class="monto monto-r"/></td>
+              <td style="text-align:center;">1</td>
+              <td><input type="text" class="det" /></td>
+              <td><input type="text" class="fact" /></td>
+              <td><input type="number" class="monto monto-r" step="0.01" inputmode="decimal" /></td>
+            </tr>
+            <tr>
+              <td style="text-align:center;">2</td>
+              <td><input type="text" class="det" /></td>
+              <td><input type="text" class="fact" /></td>
+              <td><input type="number" class="monto monto-r" step="0.01" inputmode="decimal" /></td>
+            </tr>
+            <tr>
+              <td style="text-align:center;">3</td>
+              <td><input type="text" class="det" /></td>
+              <td><input type="text" class="fact" /></td>
+              <td><input type="number" class="monto monto-r" step="0.01" inputmode="decimal" /></td>
+            </tr>
+            <tr>
+              <td style="text-align:center;">4</td>
+              <td><input type="text" class="det" /></td>
+              <td><input type="text" class="fact" /></td>
+              <td><input type="number" class="monto monto-r" step="0.01" inputmode="decimal" /></td>
+            </tr>
+            <tr>
+              <td style="text-align:center;">5</td>
+              <td><input type="text" class="det" /></td>
+              <td><input type="text" class="fact" /></td>
+              <td><input type="number" class="monto monto-r" step="0.01" inputmode="decimal" /></td>
+            </tr>
+            <tr>
+              <td style="text-align:center;">6</td>
+              <td><input type="text" class="det" /></td>
+              <td><input type="text" class="fact" /></td>
+              <td><input type="number" class="monto monto-r" step="0.01" inputmode="decimal" /></td>
+            </tr>
+            <tr>
+              <td style="text-align:center;">7</td>
+              <td><input type="text" class="det" /></td>
+              <td><input type="text" class="fact" /></td>
+              <td><input type="number" class="monto monto-r" step="0.01" inputmode="decimal" /></td>
+            </tr>
+            <tr>
+              <td style="text-align:center;">8</td>
+              <td><input type="text" class="det" /></td>
+              <td><input type="text" class="fact" /></td>
+              <td><input type="number" class="monto monto-r" step="0.01" inputmode="decimal" /></td>
             </tr>
           </tbody>
           <tfoot>
             <tr>
-              <td colspan="3">Total utilizado</td>
+              <td colspan="3">Total de presupuesto utilizado</td>
               <td><input type="number" id="totalUtilizado" readonly /></td>
             </tr>
           </tfoot>
         </table>
+        <div class="table-actions">
+          <button id="addRowRendicion" type="button" class="secondary">Agregar fila</button>
+        </div>
       </div>
 
-    </div>
+      <div class="row grid">
+        <div>
+          <label for="reembolso">Presupuesto a ser reembolsado</label>
+          <input type="number" id="reembolso" step="0.01" />
+        </div>
+        <div>
+          <label for="saldoOrg">Saldo de presupuesto a ser revertido a la organización</label>
+          <input type="number" id="saldoOrg" step="0.01" />
+        </div>
+      </div>
 
+      <div class="row">
+        <label>Descargo presentado por</label>
+        <div class="grid">
+          <!-- Persona 1 -->
+          <div class="inline-fields">
+            <div class="inline-block">
+              <label>Nombre</label>
+              <input type="text" style="min-width:220px;" />
+            </div>
+            <div class="inline-block">
+              <label>C.I.</label>
+              <input type="text" style="min-width:140px;" />
+            </div>
+            <div class="sigline" title="Firma"></div>
+          </div>
+          <!-- Persona 2 -->
+          <div class="inline-fields">
+            <div class="inline-block">
+              <label>Nombre</label>
+              <input type="text" style="min-width:220px;" />
+            </div>
+            <div class="inline-block">
+              <label>C.I.</label>
+              <input type="text" style="min-width:140px;" />
+            </div>
+            <div class="sigline" title="Firma"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Nota eliminada según tu indicación -->
+    </div>
   </div>
 
+  <script>
+    // Tabs
+    const tabSolicitudBtn = document.getElementById('tabSolicitud');
+    const tabRendicionBtn = document.getElementById('tabRendicion');
+    const viewSolicitud = document.getElementById('viewSolicitud');
+    const viewRendicion = document.getElementById('viewRendicion');
+    function setActive(tab){
+      if(tab === 'solicitud'){
+        tabSolicitudBtn.classList.add('active');
+        tabRendicionBtn.classList.remove('active');
+        viewSolicitud.classList.add('active');
+        viewRendicion.classList.remove('active');
+      } else {
+        tabRendicionBtn.classList.add('active');
+        tabSolicitudBtn.classList.remove('active');
+        viewRendicion.classList.add('active');
+        viewSolicitud.classList.remove('active');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      updateTotals();
+    }
+    tabSolicitudBtn.addEventListener('click', ()=>setActive('solicitud'));
+    tabRendicionBtn.addEventListener('click', ()=>setActive('rendicion'));
+
+    // Utilidades de suma automática
+    function sum(selector) {
+      return Array.from(document.querySelectorAll(selector))
+        .filter(el => el.offsetParent !== null) // solo visibles
+        .map(i => parseFloat((i.value || '').replace(',', '.')) || 0)
+        .reduce((a, b) => a + b, 0);
+    }
+    function updateTotals(){
+      // Totales solo de la vista activa
+      if(viewSolicitud.classList.contains('active')){
+        document.getElementById('totalSolicitado').value = sum('#viewSolicitud .monto-s').toFixed(2);
+      }
+      if(viewRendicion.classList.contains('active')){
+        document.getElementById('totalUtilizado').value = sum('#viewRendicion .monto-r').toFixed(2);
+      }
+    }
+    document.addEventListener('input', (e) => {
+      if (e.target.classList && e.target.classList.contains('monto')) updateTotals();
+    });
+
+    // Numeración automática
+    function renumerar(tbody){
+      Array.from(tbody.querySelectorAll('tr')).forEach((tr, idx) => {
+        const first = tr.querySelector('td');
+        if(first) first.textContent = (idx + 1);
+      });
+    }
+
+    // Agregar fila - Solicitud
+    document.getElementById('addRowSolicitud').addEventListener('click', () => {
+      const tbody = document.querySelector('#tablaSolicitud tbody');
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td style="text-align:center;"></td>
+        <td><input type="text" class="det" /></td>
+        <td><input type="number" class="monto monto-s" step="0.01" inputmode="decimal" /></td>
+      `;
+      tbody.appendChild(tr);
+      renumerar(tbody);
+      updateTotals();
+    });
+
+    // Agregar fila - Rendición
+    document.getElementById('addRowRendicion').addEventListener('click', () => {
+      const tbody = document.querySelector('#tablaRendicion tbody');
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td style="text-align:center;"></td>
+        <td><input type="text" class="det" /></td>
+        <td><input type="text" class="fact" /></td>
+        <td><input type="number" class="monto monto-r" step="0.01" inputmode="decimal" /></td>
+      `;
+      tbody.appendChild(tr);
+      renumerar(tbody);
+      updateTotals();
+    });
+
+    // Imprimir solo el tab visible
+    document.getElementById('btnPrint').addEventListener('click', () => {
+      updateTotals();
+      window.print();
+    });
+
+    // Limpiar solo la vista visible
+    document.getElementById('btnClear').addEventListener('click', () => {
+      const active = document.querySelector('.tabcontent.active');
+      if (!confirm('¿Desea limpiar los datos de la vista actual?')) return;
+      active.querySelectorAll('input, textarea').forEach(el => {
+        if (el.hasAttribute('readonly')) return;
+        if (el.type === 'number' || el.type === 'text' || el.tagName === 'TEXTAREA') el.value = '';
+      });
+      updateTotals();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Inicializar
+    (function init(){ updateTotals(); })();
+  </script>
 </body>
 </html>
