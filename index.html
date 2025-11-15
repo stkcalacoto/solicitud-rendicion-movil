@@ -65,7 +65,8 @@
       background:#fff;
     }
     textarea {
-      min-height: 64px;
+      min-height: 48px;
+      max-height: 120px;
       resize: vertical;
       overflow:hidden;
     }
@@ -421,21 +422,6 @@
     tabSolicitudBtn.addEventListener('click', ()=>setActive('solicitud'));
     tabRendicionBtn.addEventListener('click', ()=>setActive('rendicion'));
 
-    // Auto-resize para textareas
-    function autoResize(el){
-      el.style.height = 'auto';
-      el.style.height = el.scrollHeight + 'px';
-    }
-
-    document.addEventListener('input', (e) => {
-      if (e.target.tagName === 'TEXTAREA') {
-        autoResize(e.target);
-      }
-      if (e.target.classList && e.target.classList.contains('monto')) {
-        updateTotals();
-      }
-    });
-
     // Utilidades de suma automática
     function sum(selector) {
       return Array.from(document.querySelectorAll(selector))
@@ -471,7 +457,6 @@
       `;
       tbody.appendChild(tr);
       renumerar(tbody);
-      tr.querySelectorAll('textarea').forEach(autoResize);
       updateTotals();
     });
 
@@ -487,7 +472,6 @@
       `;
       tbody.appendChild(tr);
       renumerar(tbody);
-      tr.querySelectorAll('textarea').forEach(autoResize);
       updateTotals();
     });
 
@@ -505,14 +489,12 @@
         if (el.hasAttribute('readonly')) return;
         if (el.type === 'number' || el.type === 'text' || el.tagName === 'TEXTAREA') el.value = '';
       });
-      active.querySelectorAll('textarea').forEach(autoResize);
       updateTotals();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
     // Inicializar
     (function init(){
-      document.querySelectorAll('textarea').forEach(autoResize);
       updateTotals();
     })();
   </script>
