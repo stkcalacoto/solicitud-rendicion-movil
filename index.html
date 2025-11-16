@@ -68,7 +68,7 @@
       min-height: 48px;
       max-height: 120px;
       resize: vertical;
-      overflow:hidden;
+      overflow:auto;
     }
 
     table { width:100%; border-collapse: collapse; margin-top:8px; }
@@ -118,7 +118,7 @@
     }
 
     .sigline {
-      height:40px;              /* más espacio vertical para las firmas */
+      height:40px;
       border-bottom:1px dashed #777;
       min-width:220px;
       margin-top:8px;
@@ -181,7 +181,6 @@
       .actions { display: none !important; }
       body { background: #fff; }
       input, textarea { border: 1px solid transparent; }
-      /* Solo imprimir el tab activo */
       .tabcontent { display:none !important; }
       .tabcontent.active { display:block !important; }
     }
@@ -422,7 +421,13 @@
     tabSolicitudBtn.addEventListener('click', ()=>setActive('solicitud'));
     tabRendicionBtn.addEventListener('click', ()=>setActive('rendicion'));
 
-    // Utilidades de suma automática
+    // Suma automática en tiempo real
+    document.addEventListener('input', (e) => {
+      if (e.target.classList && e.target.classList.contains('monto')) {
+        updateTotals();
+      }
+    });
+
     function sum(selector) {
       return Array.from(document.querySelectorAll(selector))
         .filter(el => el.offsetParent !== null)
@@ -438,7 +443,6 @@
       }
     }
 
-    // Numeración automática
     function renumerar(tbody){
       Array.from(tbody.querySelectorAll('tr')).forEach((tr, idx) => {
         const first = tr.querySelector('td');
@@ -475,13 +479,11 @@
       updateTotals();
     });
 
-    // Imprimir solo el tab visible
     document.getElementById('btnPrint').addEventListener('click', () => {
       updateTotals();
       window.print();
     });
 
-    // Limpiar solo la vista visible
     document.getElementById('btnClear').addEventListener('click', () => {
       const active = document.querySelector('.tabcontent.active');
       if (!confirm('¿Desea limpiar los datos de la vista actual?')) return;
@@ -493,7 +495,6 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    // Inicializar
     (function init(){
       updateTotals();
     })();
